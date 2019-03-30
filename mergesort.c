@@ -1,14 +1,14 @@
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
 
-#define container_of(ptr, type, member)                            \
+#define container_of(ptr, type, member) \
     ((type *) ((char *) (ptr) -offsetof(type, member)))
 
 #define list_entry(node, type, member) container_of(node, type, member)
 
-typedef struct __list * list_t;
+typedef struct __list *list_t;
 typedef struct __list {
     list_t next;
 } node_t;
@@ -18,7 +18,7 @@ typedef struct __ele {
     list_t const list;
 } ele_t;
 
-static const ele_t Nil = {.val = 0, .list = &(node_t){ .next = NULL }};
+static const ele_t Nil = {.val = 0, .list = &(node_t){.next = NULL}};
 
 typedef void *const CPS_Result;
 typedef void (*MakeListCallback)(ele_t *e, CPS_Result res);
@@ -42,16 +42,20 @@ void void_map_array(VoidMappable const cb,
 
 void list2array(ele_t *e, CPS_Result res);
 
-static void print_val(int32_t const val) { printf("%d ", val); }
+static void print_val(int32_t const val)
+{
+    printf("%d ", val);
+}
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int32_t arr[] = {99, 95, 90, 85, 80, 20, 75, 15, 10, 5};
     uint32_t const arr_size = ARRAY_SIZE(arr);
 
     int32_t res[arr_size];
-    make_list(arr_size, arr, (ele_t *)(&Nil), msort_toarray, res);
+    make_list(arr_size, arr, (ele_t *) (&Nil), msort_toarray, res);
 
     void_map_array(print_val, arr_size, res);
     printf("\n");
@@ -62,38 +66,39 @@ void make_list(uint32_t const arr_size,
                int32_t const arr[],
                ele_t *e,
                MakeListCallback const cb,
-               CPS_Result res) {
+               CPS_Result res)
+{
     if (!arr_size) {
         cb(e, res);
         return;
     }
 
     make_list(arr_size - 1, arr,
-              &(ele_t){
-                   .val = arr[arr_size - 1],
-                   .list = &(node_t){ .next = (list_t)(&(e->list)) } 
-              }, 
+              &(ele_t){.val = arr[arr_size - 1],
+                       .list = &(node_t){.next = (list_t)(&(e->list))}},
               cb, res);
 }
 
-void list2array(ele_t *e, CPS_Result res) {
-    if (e->list->next == NULL) {
+void list2array(ele_t *e, CPS_Result res)
+{
+    if (!e->list->next)
         return;
-    }
     int32_t *array = res;
     array[0] = e->val;
     list2array(list_entry(e->list->next, ele_t, list), array + 1);
 }
 
-void msort_toarray(ele_t *e, CPS_Result res) {
-    if (e->list->next != NULL)
+void msort_toarray(ele_t *e, CPS_Result res)
+{
+    if (e->list->next)
         msort(&e);
     list2array(e, res);
 }
 
 void void_map_array(VoidMappable const cb,
                     uint32_t const size,
-                    int32_t const *const arr) {
+                    int32_t const *const arr)
+{
     if (!size)
         return;
     cb(arr[0]);
@@ -101,14 +106,15 @@ void void_map_array(VoidMappable const cb,
 }
 
 /* Merge sort */
-void msort(ele_t **source) {
+void msort(ele_t **source)
+{
     ele_t *head = *source;
-    ele_t *a = NULL;
-    ele_t *b = NULL;
+    ele_t *a = NULL, *b = NULL;
+    ;
 
-    if (head == NULL || head->list->next == (list_t)(&(Nil.list)))
+    if (!head || head->list->next == (list_t)(&(Nil.list)))
         return;
-    
+
     partition(head, &a, &b);
 
     msort(&a);
@@ -117,24 +123,21 @@ void msort(ele_t **source) {
     *source = mergeLists(a, b);
 }
 
-void partition(ele_t *head, ele_t **front, ele_t **back) {
+void partition(ele_t *head, ele_t **front, ele_t **back)
+{
+    ele_t *fast, *slow;
 
-    ele_t *fast;
-    ele_t *slow;
-
-    if (head == NULL || head->list->next == (list_t)(&(Nil.list))) {
+    if (!head || head->list->next == (list_t)(&(Nil.list))) {
         *front = head;
         *back = NULL;
-    }
-    else {
+    } else {
         slow = head;
         fast = list_entry(head->list->next, ele_t, list);
 
-        while(fast->list->next != NULL) {
-            
+        while (fast->list->next) {
             fast = list_entry(fast->list->next, ele_t, list);
 
-            if (fast->list->next != NULL) {
+            if (fast->list->next) {
                 slow = list_entry(slow->list->next, ele_t, list);
                 fast = list_entry(fast->list->next, ele_t, list);
             }
@@ -144,26 +147,23 @@ void partition(ele_t *head, ele_t **front, ele_t **back) {
         *back = list_entry(slow->list->next, ele_t, list);
         slow->list->next = (list_t)(&(Nil.list));
     }
-
 }
 
-ele_t *mergeLists(ele_t *a, ele_t *b) {
+ele_t *mergeLists(ele_t *a, ele_t *b)
+{
     ele_t *mergedList = NULL;
     ele_t *tmp;
 
-    if (a->list->next == NULL) {
+    if (!a->list->next)
         return b;
-    }
-    else if (b->list->next == NULL) {
+    if (!b->list->next)
         return a;
-    }
 
     if (a->val <= b->val) {
         mergedList = a;
         tmp = mergeLists(list_entry(a->list->next, ele_t, list), b);
         mergedList->list->next = (list_t)(&(tmp->list));
-    }
-    else {
+    } else {
         mergedList = b;
         tmp = mergeLists(a, list_entry(b->list->next, ele_t, list));
         mergedList->list->next = (list_t)(&(tmp->list));

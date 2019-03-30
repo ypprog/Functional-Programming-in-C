@@ -37,15 +37,20 @@ void void_map_array(VoidMappable const cb,
 void list2array(int_list_t list, CPS_Result res);
 
 /* reverse a list and then store it in an array */
-void reverse_toarray(int_list_t list, CPS_Result res) {
+void reverse_toarray(int_list_t list, CPS_Result res)
+{
     reverse(list, Nil, list2array, res);
 }
 
-static void print_val(int32_t const val) { printf("%d ", val); }
+static void print_val(int32_t const val)
+{
+    printf("%d ", val);
+}
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int32_t arr[] = {99, 95, 90, 85, 80, 20, 75, 15, 10, 5};
     uint32_t const arr_size = ARRAY_SIZE(arr);
 
@@ -64,7 +69,8 @@ void make_list(uint32_t const arr_size,
                int32_t const arr[],
                int_list_t lst,
                MakeListCallback const cb,
-               CPS_Result res) {
+               CPS_Result res)
+{
     if (!arr_size) {
         cb(lst, res);
         return;
@@ -74,7 +80,8 @@ void make_list(uint32_t const arr_size,
 }
 
 /* transform a linked list into an array */
-void list2array(int_list_t list, CPS_Result res) {
+void list2array(int_list_t list, CPS_Result res)
+{
     if (Nil == list)
         return;
     int32_t *array = res;
@@ -85,18 +92,20 @@ void list2array(int_list_t list, CPS_Result res) {
 void reverse(int_list_t list,
              int_list_t rlist, /* reversed list */
              ReversedListCallback const cb,
-             CPS_Result res) {
+             CPS_Result res)
+{
     if (Nil == list) {
         cb(rlist, res);
         return;
     }
-    reverse(list->next, &(node_t) {.val = list->val, .next = rlist}, cb, res);
+    reverse(list->next, &(node_t){.val = list->val, .next = rlist}, cb, res);
 }
 
 /* iterate over an array and performs action cb on each element */
 void void_map_array(VoidMappable const cb,
                     uint32_t const size,
-                    int32_t const *const arr) {
+                    int32_t const *const arr)
+{
     if (!size)
         return;
     cb(arr[0]);
