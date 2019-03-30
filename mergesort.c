@@ -28,10 +28,10 @@ void make_list(uint32_t const arr_size,
                MakeListCallback const cb,
                CPS_Result res);
 
-void mergesort_toarray(ele_t *e, CPS_Result res);
+void msort_toarray(ele_t *e, CPS_Result res);
 
 /* Merge sort */
-void mergesort(ele_t **source);
+void msort(ele_t **source);
 void partition(ele_t *head, ele_t **front, ele_t **back);
 ele_t *mergeLists(ele_t *a, ele_t *b);
 
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     uint32_t const arr_size = ARRAY_SIZE(arr);
 
     int32_t res[arr_size];
-    make_list(arr_size, arr, (ele_t *)(&Nil), mergesort_toarray, res);
+    make_list(arr_size, arr, (ele_t *)(&Nil), msort_toarray, res);
 
     void_map_array(print_val, arr_size, res);
     printf("\n");
@@ -85,9 +85,9 @@ void list2array(ele_t *e, CPS_Result res) {
     list2array(list_entry(e->list->next, ele_t, list), array + 1);
 }
 
-void mergesort_toarray(ele_t *e, CPS_Result res) {
+void msort_toarray(ele_t *e, CPS_Result res) {
     if (e->list->next != NULL)
-        mergesort(&e);
+        msort(&e);
     list2array(e, res);
 }
 
@@ -101,7 +101,7 @@ void void_map_array(VoidMappable const cb,
 }
 
 /* Merge sort */
-void mergesort(ele_t **source) {
+void msort(ele_t **source) {
     ele_t *head = *source;
     ele_t *a = NULL;
     ele_t *b = NULL;
@@ -111,8 +111,8 @@ void mergesort(ele_t **source) {
     
     partition(head, &a, &b);
 
-    mergesort(&a);
-    mergesort(&b);
+    msort(&a);
+    msort(&b);
 
     *source = mergeLists(a, b);
 }
