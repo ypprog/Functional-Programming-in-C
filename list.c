@@ -42,24 +42,6 @@ list *append(list *l, void *v)
     return l;
 }
 
-list *concat(list *h, list *t)
-{
-    list *curr;
-    for (curr = h; curr->next; curr = curr->next)
-        ;
-    curr->next = t;
-    return h;
-}
-
-// shallow copy
-list *copy(list *l)
-{
-    list *o = NULL;
-    for (list *curr = l; curr; curr = curr->next)
-        o = append(o, curr->val);
-    return o;
-}
-
 // objs flag set to true will also free the objects in the list
 void list_free(void *_l)
 {

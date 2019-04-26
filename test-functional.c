@@ -27,7 +27,6 @@ bool isOdd(void *v, void *args)
 }
 
 // returns twice int v
-// boy is this terrible
 void *twice(void *v, void *args)
 {
     int *o = malloc(sizeof(int));
