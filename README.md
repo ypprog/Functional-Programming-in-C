@@ -1,11 +1,4 @@
-# Functional-Programming-in-C
-https://hackmd.io/s/r1SgsdF3X
+# Functional Programming in C
 
-## References
-
-### merge sort (linked list)
-* https://www.geeksforgeeks.org/merge-sort-for-linked-list/
-
-### list.h
-* https://github.com/sysprog21/linux-list/blob/master/include/list.h
-* https://hackmd.io/SqNCmZ8HSYegTCQZ0sQKZw
+The experiment is about how you can write functional code in C, perhaps
+with some GNU extensions and certainly with some macro tricks.
