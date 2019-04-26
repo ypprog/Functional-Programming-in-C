@@ -48,5 +48,5 @@ int main(int argc, char **argv)
 
     gc_collect();
 
-    exit(0);
+    return 0;
 }

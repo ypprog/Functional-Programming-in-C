@@ -1,15 +1,13 @@
 #ifndef ENVOBJ_H
 #define ENVOBJ_H
 #include <unistd.h>
-#include "list.h"
 #include "gc.h"
+#include "list.h"
 
-typedef struct envobj envobj;
-
-struct envobj {
+typedef struct {
     void *val;
     ssize_t size;
-};
+} envobj;
 
 static inline envobj *env_item(void *var, ssize_t size)
 {
@@ -25,10 +23,9 @@ static inline void *unbox(list *l)
     return ((envobj *) l->val)->val;
 }
 
-static inline void envobj_free(void *_obj)
+static inline void envobj_free(void *obj)
 {
-    envobj *obj = _obj;
-    free(obj);
+    free((envobj *) obj);
 }
 
 #endif
