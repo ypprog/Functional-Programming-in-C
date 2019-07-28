@@ -110,7 +110,6 @@ void msort(ele_t **source)
 {
     ele_t *head = *source;
     ele_t *a = NULL, *b = NULL;
-    ;
 
     if (!head || head->list->next == (list_t)(&(Nil.list)))
         return;
@@ -152,7 +151,6 @@ void partition(ele_t *head, ele_t **front, ele_t **back)
 ele_t *mergeLists(ele_t *a, ele_t *b)
 {
     ele_t *mergedList = NULL;
-    ele_t *tmp;
 
     if (!a->list->next)
         return b;
@@ -161,11 +159,11 @@ ele_t *mergeLists(ele_t *a, ele_t *b)
 
     if (a->val <= b->val) {
         mergedList = a;
-        tmp = mergeLists(list_entry(a->list->next, ele_t, list), b);
+        ele_t *tmp = mergeLists(list_entry(a->list->next, ele_t, list), b);
         mergedList->list->next = (list_t)(&(tmp->list));
     } else {
         mergedList = b;
-        tmp = mergeLists(a, list_entry(b->list->next, ele_t, list));
+        ele_t *tmp = mergeLists(a, list_entry(b->list->next, ele_t, list));
         mergedList->list->next = (list_t)(&(tmp->list));
     }
 
