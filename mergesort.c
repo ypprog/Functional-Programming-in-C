@@ -124,14 +124,12 @@ void msort(ele_t **source)
 
 void partition(ele_t *head, ele_t **front, ele_t **back)
 {
-    ele_t *fast, *slow;
-
     if (!head || head->list->next == (list_t)(&(Nil.list))) {
         *front = head;
         *back = NULL;
     } else {
-        slow = head;
-        fast = list_entry(head->list->next, ele_t, list);
+        ele_t *slow = head;
+        ele_t *fast = list_entry(head->list->next, ele_t, list);
 
         while (fast->list->next) {
             fast = list_entry(fast->list->next, ele_t, list);
